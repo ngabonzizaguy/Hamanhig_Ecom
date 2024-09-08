@@ -32,7 +32,7 @@ const Add = () => {
             {quantity}
             <button
               className="cursor-pointer text-xl"
-              onClick={() => handleQuantity('d')}
+              onClick={() => handleQuantity('i')}
             >
               +
             </button>

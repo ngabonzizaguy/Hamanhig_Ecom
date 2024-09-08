@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CartModal from "./CartModal";
 
-// import React from 'react'
-
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -48,13 +46,12 @@ const NavIcons = () => {
         className="cursor-pointer"
       ></Image>
 
-      <div className="relative cursor-pointer">
+      <div className="relative cursor-pointer" onClick={() => setIsCartOpen((prev) =>!prev)}>
       <Image
         src="/cart.png"
         alt=""
         width={22}
         height={22}
-        className="cursor-pointer" onClick={() => setIsCartOpen((prev) =>!prev)}
         ></Image>
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-theme1 rounded-full text-white text-sm flex items-center justify-center">2</div>
       </div>
