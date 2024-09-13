@@ -2,6 +2,9 @@
 
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import {products, categories} from "@wix/stores"
+import Cookies from "js-cookie";
+
+const refreshToken = JSON.parse(Cookies.get("refreshToken") || "{}")
 
 const myWixClient = createClient({
     modules: {
@@ -11,13 +14,7 @@ const myWixClient = createClient({
     auth: OAuthStrategy({
       clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
       tokens: {
-        accessToken: {
-          value: "<ACCESS_TOKEN_VALUE>",
-          expiresAt: "<ACCESS_TOKEN_EXPIRY_DATE>",
-        },
-        refreshToken: {
-          value: "<REFRESH_TOKEN_VALUE>",
-        },
+        refreshToken, accessToken: {value: "", expiresAt: 0},
       },
     }),
   });
