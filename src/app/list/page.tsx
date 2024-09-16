@@ -29,7 +29,7 @@ const ListPage = () => {
       <Filter />
       {/* PRODUCTS */}
       <h1 className="mt-12 text-xl font-semibold">Shoes For you</h1>
-      <ProductList />
+      <ProductList categoryId='' />
     </div>
   );
 };
