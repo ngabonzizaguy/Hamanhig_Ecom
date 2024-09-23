@@ -37,7 +37,7 @@ const ProductList = async ({
   // .find();
 
   if (searchParams?.sort) {
-    const [sortType, sortBy] = searchParams.sort.split(" ")
+    const [sortType, sortBy] = searchParams?.sort.split(" ")
 
     if (sortType === "asc") {
       productQuery.ascending(sortBy);
