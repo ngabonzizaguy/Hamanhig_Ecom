@@ -3,7 +3,9 @@
 import { useWixClient } from "@/hooks/useWixClient";
 import { LoginState } from "@wix/sdk";
 import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -13,6 +15,17 @@ enum MODE {
 }
 
 const LoginPage = () => {
+  const wixClient = useWixClient();
+  const router = useRouter()
+
+  const isLoggedIn = wixClient.auth.loggedIn();
+
+  console.log(isLoggedIn)
+
+  if(isLoggedIn) {
+    router.push("/")
+  }
+
   const [mode, setMode] = useState(MODE.LOGIN);
 
   const [username, setUsername] = useState("");
@@ -42,8 +55,6 @@ const LoginPage = () => {
       ? "Reset"
       : "Verify";
 
-  const wixClient = useWixClient();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -69,7 +80,7 @@ const LoginPage = () => {
         case MODE.RESET_PASSWORD:
           response = await wixClient.auth.sendPasswordResetEmail(
             email,
-            pathName
+            window.location.href
           );
           break;
         case MODE.EMAIL_VERIFICATION:
@@ -84,13 +95,23 @@ const LoginPage = () => {
 
       switch (response?.loginState) {
         case LoginState.SUCCESS:
-          setMessage("Successful! You are being redirected.")
+          setMessage("Successful! You are being redirected.");
+          const tokens = await wixClient.auth.getMemberTokensForDirectLogin(
+            response.data.sessionToken!
+          );
+          console.log(tokens);
+
+          Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {
+            expires: 2,
+          });
+          wixClient.auth.setTokens(tokens);
+          router.push("/")
+
           break;
-      
+
         default:
           break;
       }
-
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
