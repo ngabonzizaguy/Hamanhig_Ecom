@@ -34,9 +34,10 @@ const ProductList = async ({
         ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE)
         : 0
     );
+  // .find();
 
   if (searchParams?.sort) {
-    const [sortType, sortBy] = searchParams?.sort.split(" ")
+    const [sortType, sortBy] = searchParams.sort.split(" ");
 
     if (sortType === "asc") {
       productQuery.ascending(sortBy);
@@ -47,7 +48,6 @@ const ProductList = async ({
   }
 
   const res = await productQuery.find();
-  console.log(res)
 
   return (
     <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
@@ -77,7 +77,7 @@ const ProductList = async ({
           </div>
           <div className="flex justify-between">
             <span className="font-medium">{product.name}</span>
-            <span className="font-semibold">${product.priceData?.price}</span>
+            <span className="font-semibold">${product.price?.price}</span>
           </div>
           {product.additionalInfoSections && (
             <div
@@ -91,7 +91,7 @@ const ProductList = async ({
               }}
             ></div>
           )}
-          <button className="rounded-2xl ring-1 ring-theme1 text-theme1 w-max py-2 px-4 text-xs hover:bg-theme1 hover:text-white">
+          <button className="rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white">
             Add to Cart
           </button>
         </Link>
