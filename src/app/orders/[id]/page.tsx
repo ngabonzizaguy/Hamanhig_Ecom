@@ -1,6 +1,12 @@
-import React from 'react'
+import { wixClientServer } from "@/lib/wixClientServer"
 
-const OrderPage = () => {
+
+const OrderPage = async ({params}:{params:{id:string}}) => {
+
+  const id = params.id
+
+  const wixClient = await wixClientServer()
+
   return (
     <div className=''>
       orderPage
