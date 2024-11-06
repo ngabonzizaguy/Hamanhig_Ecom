@@ -31,7 +31,7 @@ const CartModal = () => {
         });
         if(redirectSession?.fullUrl) {
           window.location.href = redirectSession.fullUrl
-        }
+        } 
     } catch (err) {
       console.log(err);
     }

@@ -2,10 +2,9 @@
 
 import { useWixClient } from "@/hooks/useWixClient";
 import { LoginState } from "@wix/sdk";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -16,14 +15,12 @@ enum MODE {
 
 const LoginPage = () => {
   const wixClient = useWixClient();
-  const router = useRouter()
+  const router = useRouter();
 
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  console.log(isLoggedIn)
-
-  if(isLoggedIn) {
-    router.push("/")
+  if (isLoggedIn) {
+    router.push("/");
   }
 
   const [mode, setMode] = useState(MODE.LOGIN);
@@ -36,16 +33,15 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  const pathName = usePathname();
-
   const formTitle =
     mode === MODE.LOGIN
       ? "Log in"
       : mode === MODE.REGISTER
       ? "Register"
       : mode === MODE.RESET_PASSWORD
-      ? "Reset your password"
-      : "Verify your Email";
+      ? "Reset Your Password"
+      : "Verify Your Email";
+
   const buttonTitle =
     mode === MODE.LOGIN
       ? "Login"
@@ -82,6 +78,7 @@ const LoginPage = () => {
             email,
             window.location.href
           );
+          setMessage("Password reset email sent. Please check your e-mail.");
           break;
         case MODE.EMAIL_VERIFICATION:
           response = await wixClient.auth.processVerification({
@@ -91,7 +88,6 @@ const LoginPage = () => {
         default:
           break;
       }
-      console.log(response);
 
       switch (response?.loginState) {
         case LoginState.SUCCESS:
@@ -99,22 +95,34 @@ const LoginPage = () => {
           const tokens = await wixClient.auth.getMemberTokensForDirectLogin(
             response.data.sessionToken!
           );
-          console.log(tokens);
 
           Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {
             expires: 2,
           });
           wixClient.auth.setTokens(tokens);
-          router.push("/")
-
+          router.push("/");
           break;
-
+        case LoginState.FAILURE:
+          if (response.errorCode === "invalidEmail" || response.errorCode === "invalidPassword")
+          {
+            setError("Invalid email or password!");
+          } else if (response.errorCode === "emailAlreadyExists") {
+            setError("Email already exists!");
+          } else if (response.errorCode === "resetPassword") {
+            setError("You need to reset your password!");
+          } else {
+            setError("Something went wrong!");
+          }
+        case LoginState.EMAIL_VERIFICATION_REQUIRED:
+          setMode(MODE.EMAIL_VERIFICATION);
+        case LoginState.OWNER_APPROVAL_REQUIRED:
+          setMessage("Your account is pending approval");
         default:
           break;
       }
     } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+      // console.log(err);
+      setError("Something went wrong!!!");
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +138,8 @@ const LoginPage = () => {
             <input
               type="text"
               name="username"
-              placeholder="username"
+              placeholder="john"
+              autoComplete="username"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -142,7 +151,8 @@ const LoginPage = () => {
             <input
               type="email"
               name="email"
-              placeholder="email@email.com"
+              placeholder="john@gmail.com"
+              autoComplete="current-email"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -166,6 +176,7 @@ const LoginPage = () => {
               type="password"
               name="password"
               placeholder="Enter your password"
+              autoComplete="current-password"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -199,7 +210,7 @@ const LoginPage = () => {
             className="text-sm underline cursor-pointer"
             onClick={() => setMode(MODE.LOGIN)}
           >
-            Have an account?
+            Have and account?
           </div>
         )}
         {mode === MODE.RESET_PASSWORD && (

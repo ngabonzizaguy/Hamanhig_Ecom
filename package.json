@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@wix/domains": "^1.0.39",
     "@wix/ecom": "^1.0.760",
+    "@wix/members": "^1.0.112",
     "@wix/redirects": "^1.0.58",
     "@wix/sdk": "^1.12.12",
     "@wix/stores": "^1.0.213",
@@ -19,6 +21,7 @@
     "react": "^18",
     "react-confetti": "^6.1.0",
     "react-dom": "^18",
+    "timeago.js": "^4.0.2",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
