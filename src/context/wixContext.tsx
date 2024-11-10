@@ -6,6 +6,7 @@ import { currentCart } from "@wix/ecom";
 import Cookies from "js-cookie";
 import { createContext, ReactNode } from "react";
 import { redirects } from "@wix/redirects";
+import React from "react";
 
 const refreshToken = JSON.parse(Cookies.get("refreshToken") || "{}");
 

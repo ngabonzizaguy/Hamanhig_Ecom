@@ -1,6 +1,7 @@
 "use client";
 
-import { useWixClient } from "@/hooks/useWixClient";
+import React from "react";
+import { useWixClient } from "../../hooks/useWixClient";
 import { LoginState } from "@wix/sdk";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -140,7 +141,7 @@ const LoginPage = () => {
             <input
               type="text"
               name="username"
-              placeholder="user"
+              placeholder="john"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -152,7 +153,7 @@ const LoginPage = () => {
             <input
               type="email"
               name="email"
-              placeholder="user@gmail.com"
+              placeholder="john@gmail.com"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -209,7 +210,7 @@ const LoginPage = () => {
             className="text-sm underline cursor-pointer"
             onClick={() => setMode(MODE.LOGIN)}
           >
-            Have an account?
+            Have and account?
           </div>
         )}
         {mode === MODE.RESET_PASSWORD && (

@@ -8,7 +8,7 @@ import { members } from "@wix/members";
 
 export const wixClientServer = async () => {
 
-    let refreshToken;
+    let refreshToken: any;
 
     try {
 
